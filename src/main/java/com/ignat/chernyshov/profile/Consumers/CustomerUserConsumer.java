@@ -1,4 +1,4 @@
-package com.ignat.chernyshov.profile.Consumers;
+package com.ignat.chernyshov.profile.consumers;
 
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
