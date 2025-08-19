@@ -14,7 +14,7 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 
-import com.ignat.chernyshov.profile.domain.dto.kafka.CustomerProfileCreateDto;
+import com.ignat.chernyshov.profile.domain.dto.kafka.RootProfileCreateDto;
 import com.ignat.chernyshov.profile.domain.dto.kafka.UserEmailUpdateDto;
 import com.ignat.chernyshov.profile.domain.dto.kafka.UserPhoneNumberUpdateDto;
 import com.ignat.chernyshov.profile.domain.dto.kafka.UserUsernameUpdateDto;
@@ -24,89 +24,89 @@ import lombok.RequiredArgsConstructor;
 @EnableKafka
 @Configuration
 @RequiredArgsConstructor
-public class KafkaConsumerConfig {
-
-    private final KafkaProperties kafkaProperties;
+public class KafkaRootConsumerConfig {
 
     private static final String TRUSTED_PACKAGES = "com.ignat.chernyshov.profile.domain.dto.kafka";
 
-    public ConsumerFactory<String, CustomerProfileCreateDto> consumerCreateProfileFactory() {
+    private final KafkaProperties kafkaProperties;
+
+    public ConsumerFactory<String, RootProfileCreateDto> consumerRootCreateProfileFactory() {
         return KafkaConsumerFactoryBuilder.buildConsumerFactory(
                 kafkaProperties.getProperties(),
-                "customer-profile-id",
-                CustomerProfileCreateDto.class,
+                "root-profile-id",
+                RootProfileCreateDto.class,
                 TRUSTED_PACKAGES
         );
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, CustomerProfileCreateDto> createProfileKafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, CustomerProfileCreateDto> factory =
+    public ConcurrentKafkaListenerContainerFactory<String, RootProfileCreateDto> createRootProfileKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, RootProfileCreateDto> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerCreateProfileFactory());
+        factory.setConsumerFactory(consumerRootCreateProfileFactory());
         return factory;
     }
 
-    public ConsumerFactory<String, UserUsernameUpdateDto> consumerUpdateUsernameFactory() {
+    public ConsumerFactory<String, UserUsernameUpdateDto> consumerRootUpdateUsernameFactory() {
         return KafkaConsumerFactoryBuilder.buildConsumerFactory(
                 kafkaProperties.getProperties(),
-                "customer-profile-id",
+                "root-profile-id",
                 UserUsernameUpdateDto.class,
                 TRUSTED_PACKAGES
         );
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, UserUsernameUpdateDto> updateUsernameKafkaListenerContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, UserUsernameUpdateDto> updateRootUsernameKafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, UserUsernameUpdateDto> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerUpdateUsernameFactory());
+        factory.setConsumerFactory(consumerRootUpdateUsernameFactory());
         return factory;
     }
 
 
-    public ConsumerFactory<String, UserEmailUpdateDto> consumerUpdateEmailFactory() {
+    public ConsumerFactory<String, UserEmailUpdateDto> consumerRootUpdateEmailFactory() {
         return KafkaConsumerFactoryBuilder.buildConsumerFactory(
                 kafkaProperties.getProperties(),
-                "customer-profile-id",
+                "root-profile-id",
                 UserEmailUpdateDto.class,
                 TRUSTED_PACKAGES
         );
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, UserEmailUpdateDto> updateEmailKafkaListenerContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, UserEmailUpdateDto> updateRootEmailKafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, UserEmailUpdateDto> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerUpdateEmailFactory());
+        factory.setConsumerFactory(consumerRootUpdateEmailFactory());
         return factory;
     }
 
-    public ConsumerFactory<String, UserPhoneNumberUpdateDto> consumerUpdatePhoneNumberFactory() {
+    public ConsumerFactory<String, UserPhoneNumberUpdateDto> consumerRootUpdatePhoneNumberFactory() {
         return KafkaConsumerFactoryBuilder.buildConsumerFactory(
                 kafkaProperties.getProperties(),
-                "customer-profile-id",
+                "root-profile-id",
                 UserPhoneNumberUpdateDto.class,
                 TRUSTED_PACKAGES
         );
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, UserPhoneNumberUpdateDto> updatePhoneNumberKafkaListenerContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, UserPhoneNumberUpdateDto> updateRootPhoneNumberKafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, UserPhoneNumberUpdateDto> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerUpdatePhoneNumberFactory());
+        factory.setConsumerFactory(consumerRootUpdatePhoneNumberFactory());
         return factory;
     }
 
-    public ConsumerFactory<String, Long> consumerLongFactory() {
+    public ConsumerFactory<String, Long> consumerRootLongFactory() {
         Map<String, Object> configProps = new HashMap<>();
         
         configProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers());
         configProps.put(ConsumerConfig.REQUEST_TIMEOUT_MS_CONFIG, 30000);
         configProps.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG, 500);
         configProps.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, 10000);
-        configProps.put(ConsumerConfig.GROUP_ID_CONFIG, "customer-profile-id");
+        configProps.put(ConsumerConfig.GROUP_ID_CONFIG, "root-profile-id");
         configProps.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         configProps.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
         configProps.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 50);
@@ -120,10 +120,10 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Long> longKafkaListenerContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, Long> longRootKafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, Long> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerLongFactory());
+        factory.setConsumerFactory(consumerRootLongFactory());
         return factory;
     }
 }

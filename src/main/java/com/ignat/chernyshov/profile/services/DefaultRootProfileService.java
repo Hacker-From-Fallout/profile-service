@@ -5,8 +5,8 @@ import java.time.LocalDate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ignat.chernyshov.profile.domain.dto.RootProfileCreateDto;
 import com.ignat.chernyshov.profile.domain.dto.RootProfileUpdateDto;
+import com.ignat.chernyshov.profile.domain.dto.kafka.RootProfileCreateDto;
 import com.ignat.chernyshov.profile.domain.entities.Gender;
 import com.ignat.chernyshov.profile.domain.entities.RootProfile;
 import com.ignat.chernyshov.profile.exception.exceptions.ProfileNotFoundException;
@@ -52,11 +52,12 @@ public class DefaultRootProfileService implements RootProfileService {
     @Transactional
     public RootProfile createProfile(RootProfileCreateDto dto) {
         RootProfile rootProfile = RootProfile.builder()
+                .id(dto.id())
                 .username(dto.username())
                 .email(dto.email())
                 .phoneNumber(dto.phoneNumber())
                 .firstName(dto.firstName())
-                .lastName(dto.lastname())
+                .lastName(dto.lastName())
                 .build();
 
         return rootProfileRepository.save(rootProfile);

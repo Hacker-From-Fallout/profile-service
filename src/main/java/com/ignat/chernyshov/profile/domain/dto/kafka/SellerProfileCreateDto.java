@@ -1,4 +1,4 @@
-package com.ignat.chernyshov.profile.domain.dto;
+package com.ignat.chernyshov.profile.domain.dto.kafka;
 
 public record SellerProfileCreateDto(
     Long id,
@@ -6,5 +6,5 @@ public record SellerProfileCreateDto(
     String email,
     String phoneNumber,
     String firstName,
-    String lastname
+    String lastName
 ) {}

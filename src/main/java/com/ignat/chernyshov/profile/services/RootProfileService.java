@@ -2,8 +2,8 @@ package com.ignat.chernyshov.profile.services;
 
 import java.time.LocalDate;
 
-import com.ignat.chernyshov.profile.domain.dto.RootProfileCreateDto;
 import com.ignat.chernyshov.profile.domain.dto.RootProfileUpdateDto;
+import com.ignat.chernyshov.profile.domain.dto.kafka.RootProfileCreateDto;
 import com.ignat.chernyshov.profile.domain.entities.Gender;
 import com.ignat.chernyshov.profile.domain.entities.RootProfile;
 

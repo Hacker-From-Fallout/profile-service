@@ -5,8 +5,8 @@ import java.time.LocalDate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ignat.chernyshov.profile.domain.dto.SellerProfileCreateDto;
 import com.ignat.chernyshov.profile.domain.dto.SellerProfileUpdateDto;
+import com.ignat.chernyshov.profile.domain.dto.kafka.SellerProfileCreateDto;
 import com.ignat.chernyshov.profile.domain.entities.Gender;
 import com.ignat.chernyshov.profile.domain.entities.SellerProfile;
 import com.ignat.chernyshov.profile.exception.exceptions.ProfileNotFoundException;
@@ -52,11 +52,12 @@ public class DefaultSellerProfileService implements SellerProfileService {
     @Transactional
     public SellerProfile createProfile(SellerProfileCreateDto dto) {
         SellerProfile sellerProfile = SellerProfile.builder()
+                .id(dto.id())
                 .username(dto.username())
                 .email(dto.email())
                 .phoneNumber(dto.phoneNumber())
                 .firstName(dto.firstName())
-                .lastName(dto.lastname())
+                .lastName(dto.lastName())
                 .build();
 
         return sellerProfileRepository.save(sellerProfile);

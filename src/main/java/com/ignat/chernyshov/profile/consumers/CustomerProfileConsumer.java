@@ -15,31 +15,31 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class CustomerUserConsumer {
+public class CustomerProfileConsumer {
 
     private final CustomerProfileService customerProfileService;
     
-    @KafkaListener(topics = "${spring.kafka.topics.create-profile}", groupId = "customer-profile-id", containerFactory = "createProfileKafkaListenerContainerFactory")
+    @KafkaListener(topics = "${spring.kafka.topics.customer.create-profile}", groupId = "customer-profile-id", containerFactory = "createCustomerProfileKafkaListenerContainerFactory")
     public void handleCreateProfile(CustomerProfileCreateDto dto) {
         customerProfileService.createProfile(dto);
     }
 
-    @KafkaListener(topics = "${spring.kafka.topics.update-username}", groupId = "customer-profile-id", containerFactory = "updateUsernameKafkaListenerContainerFactory")
+    @KafkaListener(topics = "${spring.kafka.topics.customer.update-username}", groupId = "customer-profile-id", containerFactory = "updateCustomerUsernameKafkaListenerContainerFactory")
     public void handleUpdateUsername(UserUsernameUpdateDto dto) {
         customerProfileService.updateUsername(dto.id(), dto.username());
     }
 
-    @KafkaListener(topics = "${spring.kafka.topics.update-email}", groupId = "customer-profile-id", containerFactory = "updateEmailKafkaListenerContainerFactory")
+    @KafkaListener(topics = "${spring.kafka.topics.customer.update-email}", groupId = "customer-profile-id", containerFactory = "updateCustomerEmailKafkaListenerContainerFactory")
     public void handleUpdateEmail(UserEmailUpdateDto dto) {
         customerProfileService.updateEmail(dto.id(), dto.email());
     }
 
-    @KafkaListener(topics = "${spring.kafka.topics.update-phone-number}", groupId = "customer-profile-id", containerFactory = "updatePhoneNumberKafkaListenerContainerFactory")
+    @KafkaListener(topics = "${spring.kafka.topics.customer.update-phone-number}", groupId = "customer-profile-id", containerFactory = "updateCustomerPhoneNumberKafkaListenerContainerFactory")
     public void handleUpdatePhoneNumber(UserPhoneNumberUpdateDto dto) {
         customerProfileService.updatePhoneNumber(dto.id(), dto.phoneNumber());
     }
 
-    @KafkaListener(topics = "${spring.kafka.topics.delete-profile}", groupId = "customer-profile-id", containerFactory = "longKafkaListenerContainerFactory")
+    @KafkaListener(topics = "${spring.kafka.topics.customer.delete-profile}", groupId = "customer-profile-id", containerFactory = "longCustomerKafkaListenerContainerFactory")
     public void handleDeleteProfile(Long id) {
         customerProfileService.deleteProfile(id);
     }
