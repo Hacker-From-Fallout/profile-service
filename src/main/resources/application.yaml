@@ -14,14 +14,14 @@ spring:
             hibernate:
                 format-sql: true
                 dialect: org.hibernate.dialect.PostgreSQLDialect 
-    # kafka:
-    #     bootstrap-servers: localhost:9092
-    #     producer:
-    #         key-serializer: org.apache.kafka.common.serialization.StringSerializer
-    #         value-serializer: org.apache.kafka.common.serialization.StringSerializer
-    #     consumer:
-    #         group-id: user-service
-    #         key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    #         value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    kafka:
+        bootstrap-servers: 
+            - localhost:9092
+        topics:
+            create-profile: create-profile-topic
+            update-username: update-username-topic
+            update-email: update-email-topic
+            update-phone-number: update-phone-number-topic
+            delete-profile: delete-profile-topic
 server:
     port: 8081

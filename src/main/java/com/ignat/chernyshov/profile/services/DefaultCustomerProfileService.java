@@ -5,8 +5,8 @@ import java.time.LocalDate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ignat.chernyshov.profile.domain.dto.CustomerProfileCreateDto;
 import com.ignat.chernyshov.profile.domain.dto.CustomerProfileUpdateDto;
+import com.ignat.chernyshov.profile.domain.dto.kafka.CustomerProfileCreateDto;
 import com.ignat.chernyshov.profile.domain.entities.CustomerProfile;
 import com.ignat.chernyshov.profile.domain.entities.Gender;
 import com.ignat.chernyshov.profile.exception.exceptions.ProfileNotFoundException;
@@ -52,11 +52,12 @@ public class DefaultCustomerProfileService implements CustomerProfileService {
     @Transactional
     public CustomerProfile createProfile(CustomerProfileCreateDto dto) {
         CustomerProfile customerProfile = CustomerProfile.builder()
+                .id(dto.id())
                 .username(dto.username())
                 .email(dto.email())
                 .phoneNumber(dto.phoneNumber())
                 .firstName(dto.firstName())
-                .lastName(dto.lastname())
+                .lastName(dto.lastName())
                 .build();
 
         return customerProfileRepository.save(customerProfile);

@@ -10,6 +10,7 @@ import jakarta.persistence.MappedSuperclass;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -17,6 +18,7 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
 @RequiredArgsConstructor
 @SuperBuilder

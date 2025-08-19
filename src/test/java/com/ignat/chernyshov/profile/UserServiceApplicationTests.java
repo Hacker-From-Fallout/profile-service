@@ -1,10 +1,10 @@
-package com.ignat.chernyshov.user;
+package com.ignat.chernyshov.profile;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class UserServiceApplicationTests {
+class ProfileServiceApplicationTests {
 
 	@Test
 	void contextLoads() {
