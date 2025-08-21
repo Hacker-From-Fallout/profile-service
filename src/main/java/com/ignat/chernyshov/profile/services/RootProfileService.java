@@ -2,12 +2,16 @@ package com.ignat.chernyshov.profile.services;
 
 import java.time.LocalDate;
 
+import org.springframework.data.domain.Page;
+
+import com.ignat.chernyshov.profile.domain.dto.RootProfileFilterDto;
 import com.ignat.chernyshov.profile.domain.dto.RootProfileUpdateDto;
 import com.ignat.chernyshov.profile.domain.dto.kafka.RootProfileCreateDto;
 import com.ignat.chernyshov.profile.domain.entities.Gender;
 import com.ignat.chernyshov.profile.domain.entities.RootProfile;
 
 public interface RootProfileService {
+    Page<RootProfile> findByFilters(RootProfileFilterDto filters, int page, int size);
     RootProfile findById(Long id);
     RootProfile findByUsername(String username);
     RootProfile findByEmail(String email);
@@ -16,11 +20,11 @@ public interface RootProfileService {
     RootProfile createProfile(RootProfileCreateDto dto);
     RootProfile updateProfile(Long id, RootProfileUpdateDto dto);
 
+    void updateFirstName(Long id, String firstName);
+    void updateLastName(Long id, String lastName);
     void updateUsername(Long id, String username);
     void updateEmail(Long id, String email);
     void updatePhoneNumber(Long id, String phoneNumber);
-    void updateFirstName(Long id, String firstName);
-    void updateLastName(Long id, String lastName);
     void updateAboutMyself(Long id, String aboutMyself);
     void updateDateOfBirth(Long id, LocalDate dateOfBirth);
     void updateGender(Long id, Gender gender);

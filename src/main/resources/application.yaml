@@ -2,18 +2,22 @@ spring:
     application:
         name: profile-service
     datasource:
-        url: jdbc:postgresql://localhost:5433/user-db
+        url: jdbc:postgresql://localhost:5432/profile_db
         driver-class-name: org.postgresql.Driver
         username: root
         password: password
     jpa:
         show-sql: true
         hibernate:
-            ddl-auto: update
+            ddl-auto: none
         properties:
             hibernate:
                 format-sql: true
                 dialect: org.hibernate.dialect.PostgreSQLDialect 
+                default-schema: public
+    liquibase:
+        enabled: true
+        change-log: classpath:/db/changelog/db.changelog-master.yaml
     kafka:
         bootstrap-servers: 
             - localhost:9092
@@ -38,3 +42,11 @@ spring:
                 delete-profile: delete-seller-profile-topic
 server:
     port: 8081
+
+logging:
+    level:
+        org:
+            springframework:
+                data:
+                    jpa: DEBUG
+            liquibase: DEBUG

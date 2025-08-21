@@ -2,15 +2,21 @@ package com.ignat.chernyshov.profile.services;
 
 import java.time.LocalDate;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ignat.chernyshov.profile.domain.dto.CustomerProfileFilterDto;
 import com.ignat.chernyshov.profile.domain.dto.CustomerProfileUpdateDto;
 import com.ignat.chernyshov.profile.domain.dto.kafka.CustomerProfileCreateDto;
 import com.ignat.chernyshov.profile.domain.entities.CustomerProfile;
 import com.ignat.chernyshov.profile.domain.entities.Gender;
 import com.ignat.chernyshov.profile.exception.exceptions.ProfileNotFoundException;
 import com.ignat.chernyshov.profile.repositories.CustomerProfileRepository;
+import com.ignat.chernyshov.profile.repositories.specifications.CustomerProfileSpecifications;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +25,31 @@ import lombok.RequiredArgsConstructor;
 public class DefaultCustomerProfileService implements CustomerProfileService {
 
     private final CustomerProfileRepository customerProfileRepository;
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<CustomerProfile> findByFilters(CustomerProfileFilterDto filters, int page, int size) {
+        Specification<CustomerProfile> specification = (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
+
+        if (filters.firstName() != null && !filters.firstName().isEmpty()) {
+            specification = specification.and(CustomerProfileSpecifications.hasFirstName(filters.firstName()));
+        }
+        if (filters.lastName() != null && !filters.lastName().isEmpty()) {
+            specification = specification.and(CustomerProfileSpecifications.hasLastName(filters.lastName()));
+        }
+        if (filters.username() != null && !filters.username().isEmpty()) {
+            specification = specification.and(CustomerProfileSpecifications.hasUsername(filters.username()));
+        }
+        if (filters.email() != null && !filters.email().isEmpty()) {
+            specification = specification.and(CustomerProfileSpecifications.hasEmail(filters.email()));
+        }
+        if (filters.phoneNumber() != null && !filters.phoneNumber().isEmpty()) {
+            specification = specification.and(CustomerProfileSpecifications.hasPhoneNumber(filters.phoneNumber()));
+        }
+
+        Pageable pageable = PageRequest.of(page, size);
+        return customerProfileRepository.findAll(specification, pageable);
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -53,11 +84,11 @@ public class DefaultCustomerProfileService implements CustomerProfileService {
     public CustomerProfile createProfile(CustomerProfileCreateDto dto) {
         CustomerProfile customerProfile = CustomerProfile.builder()
                 .id(dto.id())
+                .firstName(dto.firstName())
+                .lastName(dto.lastName())
                 .username(dto.username())
                 .email(dto.email())
                 .phoneNumber(dto.phoneNumber())
-                .firstName(dto.firstName())
-                .lastName(dto.lastName())
                 .build();
 
         return customerProfileRepository.save(customerProfile);
@@ -69,15 +100,6 @@ public class DefaultCustomerProfileService implements CustomerProfileService {
         CustomerProfile customerProfile = customerProfileRepository.findById(id)
             .orElseThrow(() -> new ProfileNotFoundException("Профиль не найден с id: " + id));
         
-        if (dto.username() != null) {
-            customerProfile.setUsername(dto.username());
-        }
-        if (dto.email() != null) {
-            customerProfile.setEmail(dto.email());
-        }
-        if (dto.phoneNumber() != null) {
-            customerProfile.setPhoneNumber(dto.phoneNumber());
-        }
         if (dto.firstName() != null) {
             customerProfile.setFirstName(dto.firstName());
         }

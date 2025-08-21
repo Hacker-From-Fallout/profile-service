@@ -1,7 +1,6 @@
-package com.ignat.chernyshov.profile.domain.dto.kafka;
+package com.ignat.chernyshov.profile.domain.dto;
 
-public record RootProfileCreateDto(
-    Long id,
+public record SellerProfileFilterDto(
     String firstName,
     String lastName,
     String username,

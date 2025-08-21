@@ -1,6 +1,7 @@
 package com.ignat.chernyshov.profile.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -9,15 +10,25 @@ import org.springframework.stereotype.Repository;
 import com.ignat.chernyshov.profile.domain.entities.CustomerProfile;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 
 @Repository
-public interface CustomerProfileRepository extends JpaRepository<CustomerProfile, Long> {
+public interface CustomerProfileRepository extends JpaRepository<CustomerProfile, Long>, JpaSpecificationExecutor<CustomerProfile> {
+    List<CustomerProfile> findAll();
     Optional<CustomerProfile> findById(Long id);
     Optional<CustomerProfile> findByUsername(String username);
     Optional<CustomerProfile> findByEmail(String email);
     Optional<CustomerProfile> findByPhoneNumber(String phoneNumber);
+
+    @Modifying
+    @Query(value = "UPDATE customer_profiles u SET first_name = :first_name WHERE u.id = :id", nativeQuery = true)
+    void updateFirstName(@Param("id") Long id, @Param("first_name") String firstName);
+
+    @Modifying
+    @Query(value = "UPDATE customer_profiles u SET last_name = :last_name WHERE u.id = :id", nativeQuery = true)
+    void updateLastName(@Param("id") Long id, @Param("last_name") String lastName);
 
     @Modifying
     @Query(value = "UPDATE customer_profiles p SET username = :username WHERE p.id = :id", nativeQuery = true)
@@ -30,14 +41,6 @@ public interface CustomerProfileRepository extends JpaRepository<CustomerProfile
     @Modifying
     @Query(value = "UPDATE customer_profiles p SET phone_number = :phone_number WHERE p.id = :id", nativeQuery = true)
     void updatePhoneNumber(@Param("id") Long id, @Param("phone_number") String phoneNumber);
-
-    @Modifying
-    @Query(value = "UPDATE customer_profiles u SET first_name = :first_name WHERE u.id = :id", nativeQuery = true)
-    void updateFirstName(@Param("id") Long id, @Param("first_name") String firstName);
-
-    @Modifying
-    @Query(value = "UPDATE customer_profiles u SET last_name = :last_name WHERE u.id = :id", nativeQuery = true)
-    void updateLastName(@Param("id") Long id, @Param("last_name") String lastName);
 
     @Modifying
     @Query(value = "UPDATE customer_profiles u SET about_myself = :about_myself WHERE u.id = :id", nativeQuery = true)

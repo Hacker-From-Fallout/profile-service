@@ -1,0 +1,313 @@
+databaseChangeLog:
+    - changeSet:
+        id: trigram-index
+        author: root
+        changes:
+            - sql: |
+                CREATE EXTENSION IF NOT EXISTS pg_trgm;
+
+    - changeSet:
+        id: create-customer-profiles-table
+        author: root
+        preConditions:
+            onFail: MARK_RAN
+            not:
+                - tableExists:
+                    tableName: customer_profiles
+        changes:
+            - createTable:
+                tableName: customer_profiles
+                columns:
+                    - column:
+                        name: id
+                        type: BIGINT
+                        constraints:
+                            primaryKey: true
+                            nullable: false
+                    - column:
+                        name: first_name
+                        type: VARCHAR(255)
+                        constraints:
+                          nullable: false
+                    - column:
+                        name: last_name
+                        type: VARCHAR(255)
+                        constraints:
+                          nullable: false
+                    - column:
+                        name: username
+                        type: VARCHAR(255)
+                        constraints:
+                            nullable: false
+                            unique: true
+                    - column:
+                        name: email
+                        type: VARCHAR(255)
+                        constraints:
+                            nullable: false
+                            unique: true
+                    - column:
+                        name: phone_number
+                        type: VARCHAR(50)
+                        constraints:
+                            nullable: false
+                            unique: true
+                    - column:
+                        name: about_myself
+                        type: VARCHAR(500)
+                        constraints:
+                          nullable: true
+                    - column:
+                        name: date_of_birth
+                        type: DATE
+                        constraints:
+                          nullable: true
+                    - column:
+                        name: gender
+                        type: VARCHAR(20)
+                        constraints:
+                          nullable: true
+                    - column:
+                        name: avatar_url
+                        type: VARCHAR(255)
+                        constraints:
+                          nullable: true
+
+    - changeSet:
+        id: create-trigram-index-customer-first-name
+        author: root
+        changes:
+            - sql: |
+                CREATE INDEX IF NOT EXISTS idx_customer_first_name_trgm ON customer_profiles USING gin (first_name gin_trgm_ops);
+    
+    - changeSet:
+        id: create-trigram-index-customer-last-name
+        author: root
+        changes:
+            - sql: |
+                CREATE INDEX IF NOT EXISTS idx_customer_last_name_trgm ON customer_profiles USING gin (last_name gin_trgm_ops);
+    
+    - changeSet:
+        id: create-trigram-index-customer-username
+        author: root
+        changes:
+            - sql: |
+                CREATE INDEX IF NOT EXISTS idx_customer_username_trgm ON customer_profiles USING gin (username gin_trgm_ops);
+
+    - changeSet:
+        id: create-trigram-index-customer-email
+        author: root
+        changes:
+            - sql: |
+                CREATE INDEX IF NOT EXISTS idx_customer_email_trgm ON customer_profiles USING gin (email gin_trgm_ops);
+    
+    - changeSet:
+        id: create-trigram-index-customer-phone_number
+        author: root
+        changes:
+            - sql: |
+                CREATE INDEX IF NOT EXISTS idx_customer_phone_number_trgm ON customer_profiles USING gin (phone_number gin_trgm_ops);
+    
+    - changeSet:
+        id: create-root-profiles-table
+        author: root
+        preConditions:
+            onFail: MARK_RAN
+            not:
+                - tableExists:
+                    tableName: root_profiles
+        changes:
+            - createTable:
+                tableName: root_profiles
+                columns:
+                    - column:
+                        name: id
+                        type: BIGINT
+                        constraints:
+                            primaryKey: true
+                            nullable: false
+                    - column:
+                        name: first_name
+                        type: VARCHAR(255)
+                        constraints:
+                          nullable: false
+                    - column:
+                        name: last_name
+                        type: VARCHAR(255)
+                        constraints:
+                          nullable: false
+                    - column:
+                        name: username
+                        type: VARCHAR(255)
+                        constraints:
+                            nullable: false
+                            unique: true
+                    - column:
+                        name: email
+                        type: VARCHAR(255)
+                        constraints:
+                            nullable: false
+                            unique: true
+                    - column:
+                        name: phone_number
+                        type: VARCHAR(50)
+                        constraints:
+                            nullable: false
+                            unique: true
+                    - column:
+                        name: about_myself
+                        type: VARCHAR(500)
+                        constraints:
+                          nullable: true
+                    - column:
+                        name: date_of_birth
+                        type: DATE
+                        constraints:
+                          nullable: true
+                    - column:
+                        name: gender
+                        type: VARCHAR(20)
+                        constraints:
+                          nullable: true
+                    - column:
+                        name: avatar_url
+                        type: VARCHAR(255)
+                        constraints:
+                          nullable: true
+
+    - changeSet:
+        id: create-trigram-index-root-first-name
+        author: root
+        changes:
+            - sql: |
+                CREATE INDEX IF NOT EXISTS idx_root_first_name_trgm ON root_profiles USING gin (first_name gin_trgm_ops);
+    
+    - changeSet:
+        id: create-trigram-index-root-last-name
+        author: root
+        changes:
+            - sql: |
+                CREATE INDEX IF NOT EXISTS idx_root_last_name_trgm ON root_profiles USING gin (last_name gin_trgm_ops);
+    
+    - changeSet:
+        id: create-trigram-index-root-username
+        author: root
+        changes:
+            - sql: |
+                CREATE INDEX IF NOT EXISTS idx_root_username_trgm ON root_profiles USING gin (username gin_trgm_ops);
+
+    - changeSet:
+        id: create-trigram-index-root-email
+        author: root
+        changes:
+            - sql: |
+                CREATE INDEX IF NOT EXISTS idx_root_email_trgm ON root_profiles USING gin (email gin_trgm_ops);
+    
+    - changeSet:
+        id: create-trigram-index-root-phone_number
+        author: root
+        changes:
+            - sql: |
+                CREATE INDEX IF NOT EXISTS idx_root_phone_number_trgm ON root_profiles USING gin (phone_number gin_trgm_ops);
+
+    - changeSet:
+        id: create-seller-profiles-table
+        author: root
+        preConditions:
+            onFail: MARK_RAN
+            not:
+                - tableExists:
+                    tableName: seller_profiles
+        changes:
+            - createTable:
+                tableName: seller_profiles
+                columns:
+                    - column:
+                        name: id
+                        type: BIGINT
+                        constraints:
+                            primaryKey: true
+                            nullable: false
+                    - column:
+                        name: first_name
+                        type: VARCHAR(255)
+                        constraints:
+                          nullable: false
+                    - column:
+                        name: last_name
+                        type: VARCHAR(255)
+                        constraints:
+                          nullable: false
+                    - column:
+                        name: username
+                        type: VARCHAR(255)
+                        constraints:
+                            nullable: false
+                            unique: true
+                    - column:
+                        name: email
+                        type: VARCHAR(255)
+                        constraints:
+                            nullable: false
+                            unique: true
+                    - column:
+                        name: phone_number
+                        type: VARCHAR(50)
+                        constraints:
+                            nullable: false
+                            unique: true
+                    - column:
+                        name: about_myself
+                        type: VARCHAR(500)
+                        constraints:
+                          nullable: true
+                    - column:
+                        name: date_of_birth
+                        type: DATE
+                        constraints:
+                          nullable: true
+                    - column:
+                        name: gender
+                        type: VARCHAR(20)
+                        constraints:
+                          nullable: true
+                    - column:
+                        name: avatar_url
+                        type: VARCHAR(255)
+                        constraints:
+                          nullable: true
+
+    - changeSet:
+        id: create-trigram-index-seller-first-name
+        author: root
+        changes:
+            - sql: |
+                CREATE INDEX IF NOT EXISTS idx_seller_first_name_trgm ON seller_profiles USING gin (first_name gin_trgm_ops);
+    
+    - changeSet:
+        id: create-trigram-index-seller-last-name
+        author: root
+        changes:
+            - sql: |
+                CREATE INDEX IF NOT EXISTS idx_seller_last_name_trgm ON seller_profiles USING gin (last_name gin_trgm_ops);
+    
+    - changeSet:
+        id: create-trigram-index-seller-username
+        author: root
+        changes:
+            - sql: |
+                CREATE INDEX IF NOT EXISTS idx_seller_username_trgm ON seller_profiles USING gin (username gin_trgm_ops);
+
+    - changeSet:
+        id: create-trigram-index-seller-email
+        author: root
+        changes:
+            - sql: |
+                CREATE INDEX IF NOT EXISTS idx_seller_email_trgm ON seller_profiles USING gin (email gin_trgm_ops);
+    
+    - changeSet:
+        id: create-trigram-index-seller-phone_number
+        author: root
+        changes:
+            - sql: |
+                CREATE INDEX IF NOT EXISTS idx_seller_phone_number_trgm ON seller_profiles USING gin (phone_number gin_trgm_ops);

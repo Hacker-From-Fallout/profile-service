@@ -2,15 +2,21 @@ package com.ignat.chernyshov.profile.services;
 
 import java.time.LocalDate;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ignat.chernyshov.profile.domain.dto.RootProfileFilterDto;
 import com.ignat.chernyshov.profile.domain.dto.RootProfileUpdateDto;
 import com.ignat.chernyshov.profile.domain.dto.kafka.RootProfileCreateDto;
-import com.ignat.chernyshov.profile.domain.entities.Gender;
 import com.ignat.chernyshov.profile.domain.entities.RootProfile;
+import com.ignat.chernyshov.profile.domain.entities.Gender;
 import com.ignat.chernyshov.profile.exception.exceptions.ProfileNotFoundException;
 import com.ignat.chernyshov.profile.repositories.RootProfileRepository;
+import com.ignat.chernyshov.profile.repositories.specifications.RootProfileSpecifications;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +25,31 @@ import lombok.RequiredArgsConstructor;
 public class DefaultRootProfileService implements RootProfileService {
 
     private final RootProfileRepository rootProfileRepository;
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<RootProfile> findByFilters(RootProfileFilterDto filters, int page, int size) {
+        Specification<RootProfile> specification = (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
+
+        if (filters.firstName() != null && !filters.firstName().isEmpty()) {
+            specification = specification.and(RootProfileSpecifications.hasFirstName(filters.firstName()));
+        }
+        if (filters.lastName() != null && !filters.lastName().isEmpty()) {
+            specification = specification.and(RootProfileSpecifications.hasLastName(filters.lastName()));
+        }
+        if (filters.username() != null && !filters.username().isEmpty()) {
+            specification = specification.and(RootProfileSpecifications.hasUsername(filters.username()));
+        }
+        if (filters.email() != null && !filters.email().isEmpty()) {
+            specification = specification.and(RootProfileSpecifications.hasEmail(filters.email()));
+        }
+        if (filters.phoneNumber() != null && !filters.phoneNumber().isEmpty()) {
+            specification = specification.and(RootProfileSpecifications.hasPhoneNumber(filters.phoneNumber()));
+        }
+
+        Pageable pageable = PageRequest.of(page, size);
+        return rootProfileRepository.findAll(specification, pageable);
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -53,11 +84,11 @@ public class DefaultRootProfileService implements RootProfileService {
     public RootProfile createProfile(RootProfileCreateDto dto) {
         RootProfile rootProfile = RootProfile.builder()
                 .id(dto.id())
+                .firstName(dto.firstName())
+                .lastName(dto.lastName())
                 .username(dto.username())
                 .email(dto.email())
                 .phoneNumber(dto.phoneNumber())
-                .firstName(dto.firstName())
-                .lastName(dto.lastName())
                 .build();
 
         return rootProfileRepository.save(rootProfile);
@@ -69,15 +100,6 @@ public class DefaultRootProfileService implements RootProfileService {
         RootProfile rootProfile = rootProfileRepository.findById(id)
             .orElseThrow(() -> new ProfileNotFoundException("Профиль не найден с id: " + id));
         
-        if (dto.username() != null) {
-            rootProfile.setUsername(dto.username());
-        }
-        if (dto.email() != null) {
-            rootProfile.setEmail(dto.email());
-        }
-        if (dto.phoneNumber() != null) {
-            rootProfile.setPhoneNumber(dto.phoneNumber());
-        }
         if (dto.firstName() != null) {
             rootProfile.setFirstName(dto.firstName());
         }
